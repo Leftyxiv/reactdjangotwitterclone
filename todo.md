@@ -3,7 +3,7 @@
  - login
  - logout
  - profile
-    - image
+    - image -> media storage server
     - text
     - follow
  - feed
