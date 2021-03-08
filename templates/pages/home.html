@@ -20,7 +20,7 @@ Manny's magnificent fake twitter
     <form class="form" id='tweet-create-form'action="/create-tweet" method='POST'>
       {% csrf_token %}
       <input type='hidden' value='/' name='next' />
-      <textarea class='form-control' name='content' placeholder="Your tweet"></textarea>
+      <textarea  required='required' class='form-control' name='content' placeholder="Your tweet"></textarea>
       <button type='submit' class='btn btn-primary'>Tweet</button>
     </form>
   </div>
@@ -52,6 +52,7 @@ Manny's magnificent fake twitter
           const newTweetElement = formatTweetElement(newTweetJson)
           const ogHtml = document.getElementById('tweets').innerHTML
           document.getElementById('tweets').innerHTML = newTweetElement + ogHtml
+          myForm.reset()
         }
 
   }
