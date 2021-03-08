@@ -24,7 +24,7 @@ SECRET_KEY = '!=v-wt0x0pq2pbg)@nnhi+hs1$)@f-trr%f!90ic1c8=5!4^@$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', '.aledoux.net']
 
 
 # Application definition

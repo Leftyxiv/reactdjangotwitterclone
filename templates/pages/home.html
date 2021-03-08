@@ -6,7 +6,7 @@ Manny's magnificent fake twitter
 
 {% block content %}
 
-<div class="row text-center  bg-tweetme">
+<div class="row text-center">
 <div class="col">
 <h1>
 
@@ -15,24 +15,77 @@ Manny's magnificent fake twitter
 </div>
 </div>
 
-
+<div class="row mb-4">
+  <div class="col-md-4 mx-auto col-10">
+    <form class="form" id='tweet-create-form'action="/create-tweet" method='POST'>
+      {% csrf_token %}
+      <input type='hidden' value='/' name='next' />
+      <textarea class='form-control' name='content' placeholder="Your tweet"></textarea>
+      <button type='submit' class='btn btn-primary'>Tweet</button>
+    </form>
+  </div>
+</div>
 <div class="row" id="tweets">
   Loading...
 </div>
 
 
 <script>
-  const tweetsEl = document.getElementById('tweets') // $("#tweets") jquery
-  // tweetsEl.innerHTML = "Loading...";
+  //const tweetsEl = document.getElementById('tweets') // $("#tweets") jquery
+  const handleTweetFormDidSubmit = (evt) => {
+    evt.preventDefault();
+    const myForm = evt.target
+    const myFormData = new FormData(myForm)
+    // for(let myItem of myFormData.entries()){
+    //   console.log(myItem)
+    // }
+      const url = myForm.getAttribute('action')
+      const method = myForm.getAttribute('method')
+      const xhr = new XMLHttpRequest()
+      xhr.open(method, url)
+      xhr.setRequestHeader('HTTP_X_REQUESTED_WITH', 'XMLHttpRequest')
+      xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
+      xhr.onload = function() {
+        if(xhr.status === 201){
+          const newTweet = xhr.response
+          const newTweetJson = JSON.parse(newTweet)
+          const newTweetElement = formatTweetElement(newTweetJson)
+          const ogHtml = document.getElementById('tweets').innerHTML
+          document.getElementById('tweets').innerHTML = newTweetElement + ogHtml
+        }
 
-  // let el1 = "<h1>hi there 1</h1>"
-  // let el2 = "<h1>hi there 2</h1>"
-  // let el3 = "<h1>hi there 3</h1>"
-  // tweetsEl.innerHTML = `${el1} ${el2} ${el3}`
+  }
+xhr.send(myFormData)
+}
+  
+  const tweetCreateFormEl = document.getElementById('tweet-create-form')
+  tweetCreateFormEl.addEventListener('submit', handleTweetFormDidSubmit)
 
-  const xhr = new XMLHttpRequest()
-  const method = 'GET'
-  const url = '/tweets'
+  const loadTweets = (tweetsEl) => {
+    
+      const xhr = new XMLHttpRequest()
+      const method = 'GET'
+      const url = '/tweets'
+      const responseType = 'json'
+    
+      xhr.responseType = responseType;
+      xhr.open(method, url)
+      xhr.onload = function() {
+        console.log(xhr.response)
+        const serverResponse = xhr.response
+        var listedItems = serverResponse.response
+        let finalTweetStr = ""
+        for (let i = 0; i < listedItems.length; ++i){
+          let tweetObject = listedItems[i];
+          let currentItem = formatTweetElement(tweetObject)
+          finalTweetStr += currentItem; 
+        }
+      tweetsEl.innerHTML= finalTweetStr
+      }
+      xhr.send()
+
+  }
+  loadTweets(document.getElementById('tweets'))
 
   function handleDidLike(tweet_id, currentCount) {
     currentCount += 1
@@ -47,23 +100,6 @@ Manny's magnificent fake twitter
     return formattedTweet
   }
 
-  const responseType = 'json'
-
-  xhr.responseType = responseType;
-  xhr.open(method, url)
-  xhr.onload = function() {
-    console.log(xhr.response)
-    const serverResponse = xhr.response
-    var listedItems = serverResponse.response
-    let finalTweetStr = ""
-    for (let i = 0; i < listedItems.length; ++i){
-      let tweetObject = listedItems[i];
-      let currentItem = formatTweetElement(tweetObject)
-      finalTweetStr += currentItem; 
-    }
-  tweetsEl.innerHTML= finalTweetStr
-  }
-  xhr.send()
 
 </script>
 {% endblock content %}
