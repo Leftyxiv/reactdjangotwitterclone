@@ -19,7 +19,7 @@ Manny's magnificent fake twitter
   <div class="col-md-4 mx-auto col-10">
     <form class="form" id='tweet-create-form'action="/create-tweet" method='POST'>
       {% csrf_token %}
-      <div class="d-none alert alert-danger" id='tweet-create-form-error'></div>
+      <div class="d-none alert alert-danger" id='tweet-create-form-error'>LOL</div>
       <input type='hidden' value='/' name='next' />
       <textarea  required='required' class='form-control' name='content' placeholder="Your tweet"></textarea>
       <button type='submit' class='btn btn-primary'>Tweet</button>
@@ -33,7 +33,7 @@ Manny's magnificent fake twitter
 
 <script>
 
-  const handleTweetFormError = (msg, display) => {
+  function handleTweetFormError (msg, display){
     let myErrorDiv = document.getElementById('tweet-create-form-error')
     if (display){
       myErrorDiv.setAttribute('class', 'd-block alert alert-danger')
@@ -53,23 +53,27 @@ Manny's magnificent fake twitter
       const url = myForm.getAttribute('action')
       const method = myForm.getAttribute('method')
       const xhr = new XMLHttpRequest()
+      const responseType = "json"
+      xhr.responseType = responseType
       xhr.open(method, url)
       xhr.setRequestHeader('HTTP_X_REQUESTED_WITH', 'XMLHttpRequest')
       xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
       xhr.onload = function() {
+        console.log(xhr.status)
         if(xhr.status === 201){
           const newTweet = xhr.response
-          const newTweetJson = JSON.parse(newTweet)
-          const newTweetElement = formatTweetElement(newTweetJson)
+          const newTweetElement = formatTweetElement(newTweet)
           const ogHtml = document.getElementById('tweets').innerHTML
           document.getElementById('tweets').innerHTML = newTweetElement + ogHtml
           myForm.reset()
         } else if (xhr.status === 400){
+          
           const errorJson = xhr.response
           const contentError = errorJson.content
           let contentErrorMessage;
           if(contentError){
             contentErrorMessage = contentError[0]
+            console.log(contentErrorMessage)
             if (contentErrorMessage){
               handleTweetFormError(contentErrorMessage, true)
             }
