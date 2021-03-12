@@ -25,6 +25,8 @@ SECRET_KEY = '!=v-wt0x0pq2pbg)@nnhi+hs1$)@f-trr%f!90ic1c8=5!4^@$'
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', '.aledoux.net']
+LOGIN_URL = "/login"
+MAX_TWEET_LENGTH = 240
 
 
 # Application definition
@@ -36,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    # third-party
+    'rest_framework',
+    # internal
     'tweets',
 ]
 
