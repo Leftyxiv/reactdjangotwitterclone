@@ -86,6 +86,7 @@ export const ActionBtn = (props) => {
 export const TweetList = (props) => {
   const [tweetsInit, setTweetsInit] = useState([])
   const [tweets, setTweets] = useState([])
+  const [tweetsDidSet, setTweetsDidSet] = useState(false)
 
   useEffect(()=> {
     let final = [...props.newTweets].concat(tweetsInit)
@@ -94,15 +95,18 @@ export const TweetList = (props) => {
    }
   },[props.newTweets, tweetsInit, tweets])
   useEffect(()=> {
+    if(tweetsDidSet === false){
     const myCallback = (res, status) => {
       if(status === 200){
         setTweetsInit(res)
+        setTweetsDidSet(true)
       } else {
         alert('ERROR WILL ROBINSON')
       }
     }
   loadTweets(myCallback)
-  },[])
+    }
+  },[tweetsInit, tweetsDidSet, setTweetsDidSet])
 return  tweets.map((tweet, index) => {
   return <Tweet tweet={tweet} key={tweet.id} className='my-5 py-5 border bg-white text-dark'/>
 })
