@@ -1,6 +1,6 @@
 import React, { useState, useEffect, createRef } from 'react';
 import { v4 as uuid } from 'uuid';
-import { loadTweets } from '../lookup'
+import { loadTweets, createTweet } from '../lookup'
 
 export const TweetsComponent = (props) => {
   const [newTweets, setNewTweets] = useState([])
@@ -10,11 +10,14 @@ export const TweetsComponent = (props) => {
     e.preventDefault()
     const textValue = textAreaRef.current.value
     let tempNewTweet = [...newTweets]
-    tempNewTweet.unshift({
-      content: textValue,
-      likes: 0,
-      id: uuid()
-    })
+    createTweet(textValue, (res, status) => {
+      if(status === 201){
+      tempNewTweet.unshift(res)
+    } else {
+      console.log(res)
+      alert('An error has occurred, please try again later')
+    }
+  })
     setNewTweets(tempNewTweet)
     textAreaRef.current.value = ''
   }
@@ -35,7 +38,13 @@ export const TweetsComponent = (props) => {
 }
 
 
-
+/*
+{
+        content: textValue,
+        likes: 0,
+        id: uuid()
+      }
+*/
 
 
 export const Tweet = (props) => {
