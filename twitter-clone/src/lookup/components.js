@@ -1,3 +1,9 @@
+const lookup = (method, endpoint, callback, data) => {
+  let jsonData;
+  if(data){
+    jsonData = JSON.stringify(data)
+  }
+}
 export const loadTweets = (callback) => {
   
   const xhr = new XMLHttpRequest()

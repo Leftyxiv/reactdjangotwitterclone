@@ -70,7 +70,6 @@ export const ActionBtn = (props) => {
   event.preventDefault()
   if (action.type === 'like'){
     if (clicked){
-      //unlike maybe?
     setClicked(!clicked)
     setLikes(likes - 1)
   } else {
@@ -91,7 +90,6 @@ export const TweetList = (props) => {
   useEffect(()=> {
     let final = [...props.newTweets].concat(tweetsInit)
    if(final.length !== tweets.length){
-      console.log(final.length, tweets.length)
     setTweets(final)
    }
   },[props.newTweets, tweetsInit, tweets])
